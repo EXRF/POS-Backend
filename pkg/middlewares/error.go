@@ -3,6 +3,7 @@ package middlewares
 import (
 	"net/http"
 
+	"github.com/EXRF/POS-Backend/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,10 +14,7 @@ func ErrorHandler() gin.HandlerFunc {
 		if len(c.Errors) > 0 {
 			err := c.Errors.Last().Err
 
-			c.JSON(http.StatusInternalServerError, map[string]any{
-				"success": false,
-				"message": err.Error(),
-			})
+			utils.JSONError(c, http.StatusInternalServerError, err.Error())
 		}
 	}
 }
