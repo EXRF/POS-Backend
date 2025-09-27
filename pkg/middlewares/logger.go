@@ -11,7 +11,7 @@ import (
 )
 
 // LoggerToFile creates a logger middleware that writes logs in a custom format
-func LoggerToFile() gin.HandlerFunc {
+func Logger() gin.HandlerFunc {
 	return gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
 		return fmt.Sprintf("[GIN] %s | %3d | %13v | %15s | %-7s %#v\n",
 			param.TimeStamp.Format("2006/01/02 - 15:04:05"),
