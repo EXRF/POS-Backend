@@ -5,10 +5,9 @@ import (
 	"fmt"
 
 	"github.com/EXRF/POS-Backend/internal/entities"
+	"github.com/EXRF/POS-Backend/pkg/utils"
 	"gorm.io/gorm"
 )
-
-var ErrUserNotFound = errors.New("User not found")
 
 // UserRepository defines the interface for user-related database operations
 type UserRepository interface {
@@ -41,7 +40,7 @@ func (r *userRepository) GetUserByEmail(email string) (*entities.User, error) {
 	var user entities.User
 	result := r.db.Where("email = ?", email).First(&user)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return nil, ErrUserNotFound
+		return nil, errors.New(utils.ErrUserNotFound)
 	}
 	if result.Error != nil {
 		return nil, result.Error
@@ -53,7 +52,7 @@ func (r *userRepository) GetUserByUsername(username string) (*entities.User, err
 	var user entities.User
 	result := r.db.Where("username = ?", username).First(&user)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return nil, ErrUserNotFound
+		return nil, errors.New(utils.ErrUserNotFound)
 	}
 	if result.Error != nil {
 		return nil, result.Error

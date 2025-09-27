@@ -14,10 +14,14 @@ func SetupRoutes(router *gin.Engine, handler *Handler) {
 	// Health check endpoint
 	router.GET("/health", handler.HealthCheck)
 
-	// User routes
-	users := router.Group("/api/v1/")
+	// Group routes under /api/v1
+	v1 := router.Group("/api/v1")
 	{
-		users.POST("/register", handler.RegisterUser)
+		// Auth routes
+		auth := v1.Group("/auth")
+		{
+			auth.POST("/signup", handler.RegisterUser)
+		}
 	}
 }
 
@@ -33,10 +37,13 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	r := gin.New()
 
 	// Add custom logger middleware
-	r.Use(middlewares.LoggerToFile())
+	r.Use(middlewares.Logger())
 
 	// Add recovery middleware to handle panics
 	r.Use(middlewares.RecoveryWithLogger())
+
+	// Add error handling middleware
+	r.Use(middlewares.ErrorHandler())
 
 	handler := ProvideHandler(db)
 	SetupRoutes(r, handler)

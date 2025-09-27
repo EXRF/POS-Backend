@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/EXRF/POS-Backend/pkg/utils"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -16,16 +15,8 @@ var DB *gorm.DB
 
 // ConnectDB establishes a connection to the PostgreSQL database using GORM
 func ConnectDB() (*gorm.DB, error) {
-	// Load environment variables or use default values
-	host := utils.GetEnvOrDefault("DB_HOST", "localhost")
-	port := utils.GetEnvOrDefault("DB_PORT", "5432")
-	user := utils.GetEnvOrDefault("DB_USER", "postgres")
-	password := utils.GetEnvOrDefault("DB_PASSWORD", "postgres")
-	dbname := utils.GetEnvOrDefault("DB_NAME", "pos")
-
 	// Connection string
-	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+	dsn := os.Getenv("DATABASE_URL")
 
 	// Initialize GORM with logging based on environment
 	var gormLogger logger.Interface
